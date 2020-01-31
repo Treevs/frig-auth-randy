@@ -1,38 +1,134 @@
-.App {
-  text-align: center;
+body {
+  margin: 0;
+  padding-top: 48px; /* Offset fixed header */
+  font-family: 'Rubik', sans-serif;
+
+  /* font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif; */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  background: #55efc4;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/* Button CSS from https://fdossena.com/index.php?p=html5cool/buttons/i.frag */
+button{
+  display:inline-block;
+  padding:0.35em 1.2em;
+  border:0.1em solid #636e72;
+  margin:0 0.3em 0.3em 0;
+  border-radius:0.12em;
+  box-sizing: border-box;
+  text-decoration:none;
+  font-family:'Roboto',sans-serif;
+  font-weight:300;
+  color: #636e72;
+  text-align:center;
+  transition: all 0.2s;
+}
+button:hover{
+  color:#000000;
+  background-color:#FFFFFF;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+button.success {
+  color: #00b894;
+  border:0.1em solid #00b894;
 }
 
-.App-link {
-  color: #61dafb;
+.logo {
+  font-size: 36px;
+}
+.hidden { 
+  display: none;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}
+
+.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.nav-button {
+  display: inline;
+  margin: 5px;
+}
+
+.navbar {
+  background-color: azure;
+  height: 48px;
+  width: 100%;
+  display: inline-block;
+  left:0;
+  top: 0;
+  position: fixed;
+  box-shadow: 0px -5px 35px #888888;
+  z-index: 99;
+}
+
+.welcome-message {
+  position: absolute;
+  right: 25px;
+  top: 7px;
+}
+.percent {
+  font-style: italic;
+  margin-left: 5px;
+}
+
+.positive-change {
+  color: #00b894;
+}
+
+.negative-change {
+  color: #d63031;
+}
+
+.stock-card {
+  background: #ffffff;
+  width: 420px;
+  margin-left: auto;
+  margin-right: auto;
+  padding:20px;
+  border-radius: 5px;
+  box-shadow: 1px 3px 3px #888888;
+}
+
+.stock-header {
+  padding: 10px;
+}
+
+.stock-body.open {
+  height: 300px;
+  visibility: visible;
+  overflow: hidden;
+  
+  -webkit-transition: height .5s; /* Safari prior 6.1 */
+  transition: height .5s;
+  
+}
+.stock-body.closed {
+  height: 40px;
+  visibility: hidden;
+  
+  -webkit-transition: height .5s; /* Safari prior 6.1 */
+  transition: height .5s;
+}
+
+.stock-controls {
+  padding: 10px;
 }
