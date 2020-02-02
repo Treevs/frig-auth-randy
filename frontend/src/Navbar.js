@@ -1,9 +1,28 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
+
+import LoginRegisterModal from './LoginRegisterModal';
+import Modal from 'react-modal';
 const axios = require('axios');
 const store = require('store');
 
 
+const customStyles = {
+  content : {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    transform             : 'translate(-50%, -50%)'
+  }
+};
+
+Modal.setAppElement('#root');
+
 export class Navbar extends React.Component {
+
+  
   constructor(props){
     super(props)
     
@@ -25,6 +44,7 @@ export class Navbar extends React.Component {
       showRegisterForm: false,
       email: "",
       password: "",
+      modalIsOpen: false
     }
 
 
@@ -37,10 +57,17 @@ export class Navbar extends React.Component {
     this.register = this.register.bind(this);
     this.current = this.current.bind(this);
     this.logout = this.logout.bind(this);
+    this.openModal = this.openModal.bind(this);
+    this.afterOpenModal = this.afterOpenModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+
+    
+
   }
 
   componentDidMount() {
     // this.formatPrice();
+    // this.openModal();
   }
 
   login() {
@@ -62,7 +89,8 @@ export class Navbar extends React.Component {
         user: response.data.user,
         token: response.data.user.token,
         loggedIn: true,
-        showLoginForm: false
+        showLoginForm: false,
+        modalIsOpen: false
       })
     })
     .catch(function (error) {
@@ -79,6 +107,7 @@ export class Navbar extends React.Component {
       user: {
         email: email,
         password: password,
+        modalIsOpen: false
       }
     })
     .then((response) => {
@@ -121,12 +150,14 @@ export class Navbar extends React.Component {
   }
   toggleLoginForm() {
     this.setState(state => ({
+      modalIsOpen: !state.showLoginForm,
       showLoginForm: !state.showLoginForm,
       showRegisterForm: false
     }));
   }
   toggleRegisterForm() {
     this.setState(state => ({
+      modalIsOpen: !state.showRegisterForm,
       showRegisterForm: !state.showRegisterForm,
       showLoginForm: false
     }));
@@ -138,32 +169,79 @@ export class Navbar extends React.Component {
     this.setState({password: event.target.value});
   }
 
+  openModal() {
+    this.setState({modalIsOpen: true});
+  }
+ 
+  afterOpenModal() {
+    // references are now sync'd and can be accessed.
+    // this.subtitle.style.color = '#f00';
+  }
+ 
+  closeModal() {
+    this.setState({
+      modalIsOpen: false,
+      showLoginForm: false,
+      showRegisterForm: false
+
+    });
+  }
+ 
+
 
   render() {
     return (
-      <div className="navbar">
-        <div className="center logo">
-          TITLE
-        </div>
-        <div className="welcome-message">
+      <div className="navbar-container">
+        <Modal
+          isOpen={this.state.modalIsOpen}
+          onAfterOpen={this.afterOpenModal}
+          onRequestClose={this.closeModal}
+          style={customStyles}
+          contentLabel="Login Modal"
+        >
           <div>
-            <div className={this.state.loggedIn ? 'hidden' : ''}>
-              <button className="nav-button" onClick={this.toggleLoginForm}>Login</button>
-              <button className="nav-button" onClick={this.toggleRegisterForm}>Sign Up</button>
+            <div className={this.state.showLoginForm ? '' : 'hidden'}>
+              <h2 className="login-modal">Login</h2>
+              Email: <input type="email" value={this.state.email} onChange={this.handleEmailChange}/>
+              Password: <input type="password" value={this.state.password} onChange={this.handlePasswordChange}/>
+              <button onClick={this.login}>Log In</button>
+              <button onClick={this.closeModal}>Close</button>
             </div>
-            <div className={this.state.loggedIn ? '' : 'hidden'}>
-              <button className="nav-button" onClick={this.logout}>Logout</button>
+            <div className={this.state.showRegisterForm ? '' : 'hidden'}>
+              <h2 className="register-modal">Register</h2>
+              Email: <input type="email" value={this.state.email} onChange={this.handleEmailChange}/>
+              Password: <input type="password" value={this.state.password} onChange={this.handlePasswordChange}/>
+              <button onClick={this.register}>Sign Up</button>
+              <button onClick={this.closeModal}>Close</button>
             </div>
+          </div> 
+          {/* <LoginRegisterModal></LoginRegisterModal> */}
+        </Modal>
+        
+        <div className="navbar">
+          <div className="center logo">
+            TITLE
           </div>
-          <div className={this.state.showLoginForm ? '' : 'hidden'}>
-            Email: <input type="email" value={this.state.email} onChange={this.handleEmailChange}/>
-            Password: <input type="password" value={this.state.password} onChange={this.handlePasswordChange}/>
-            <button onClick={this.login}>Log In</button>
-          </div>
-          <div className={this.state.showRegisterForm ? '' : 'hidden'}>
-            Email: <input type="email" value={this.state.email} onChange={this.handleEmailChange}/>
-            Password: <input type="password" value={this.state.password} onChange={this.handlePasswordChange}/>
-            <button onClick={this.register}>Sign Up</button>
+          <div className="welcome-message">
+            <div>
+              <div className={this.state.loggedIn ? 'hidden' : ''}>
+                <button className="nav-button" onClick={this.toggleLoginForm}>Login</button>
+                <button className="nav-button" onClick={this.toggleRegisterForm}>Sign Up</button>
+              </div>
+              <div className={this.state.loggedIn ? '' : 'hidden'}>
+                <button className="nav-button" onClick={this.logout}>Logout</button>
+              </div>
+            </div>
+            {/* <div className={this.state.showLoginForm ? '' : 'hidden'}>
+              Email: <input type="email" value={this.state.email} onChange={this.handleEmailChange}/>
+              Password: <input type="password" value={this.state.password} onChange={this.handlePasswordChange}/>
+              <button onClick={this.login}>Log In</button>
+            </div>
+            <div className={this.state.showRegisterForm ? '' : 'hidden'}>
+              Email: <input type="email" value={this.state.email} onChange={this.handleEmailChange}/>
+              Password: <input type="password" value={this.state.password} onChange={this.handlePasswordChange}/>
+              <button onClick={this.register}>Sign Up</button>
+            </div> */}
           </div>
         </div>
       </div>

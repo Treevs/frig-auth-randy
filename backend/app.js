@@ -4,12 +4,17 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require("mongoose");
+
+require('dotenv').config()
 mongoose.Promise = global.Promise;
 
 var dbhost = process.env.DB_HOST || 'localhost';
 var dbport = process.env.DB_PORT || '27017';
-var dbcollection = process.env.DB_COLLECTION
-mongoose.connect("mongodb://"+dbhost+":"+dbport+"/"+dbcollection, { useNewUrlParser: true });
+var dbcollection = process.env.DB_COLLECTION || 'foo';
+var connectionString = "mongodb://"+dbhost+":"+dbport+"/"+dbcollection;
+
+console.log(connectionString);
+mongoose.connect(connectionString, { useNewUrlParser: true });
 mongoose.promise = global.Promise;
 
 
