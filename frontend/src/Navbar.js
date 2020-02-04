@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import LoginRegisterModal from './LoginRegisterModal';
 import Modal from 'react-modal';
 const axios = require('axios');
 const store = require('store');
