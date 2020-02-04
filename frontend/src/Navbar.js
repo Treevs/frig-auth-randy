@@ -86,6 +86,7 @@ export class Navbar extends React.Component {
       console.log(response.data)
       this.setState({
         user: response.data.user,
+        username: response.data.user.username,
         token: response.data.user.token,
         loggedIn: true,
         showLoginForm: false,
@@ -130,9 +131,12 @@ export class Navbar extends React.Component {
       this.setState({
         user: response.data.user,
         // token: response.data.user.token,
+        username: response.data.user.username,
         loggedIn: true,
         showLoginForm: false
       })
+
+      console.log(this.state.user)
     })
     .catch(function (error) {
       // handle error
@@ -228,7 +232,14 @@ export class Navbar extends React.Component {
                 <button className="nav-button" onClick={this.toggleRegisterForm}>Sign Up</button>
               </div>
               <div className={this.state.loggedIn ? '' : 'hidden'}>
-                <button className="nav-button" onClick={this.logout}>Logout</button>
+                <div>
+                  {
+                    this.state.username &&
+                    "Welcome, " + this.state.username
+                  }
+                  
+                  <button className="nav-button" onClick={this.logout}>Logout</button>
+                </div>
               </div>
             </div>
             {/* <div className={this.state.showLoginForm ? '' : 'hidden'}>
