@@ -23,6 +23,14 @@ router.post('/register', auth.optional, (req, res, next) => {
             },
         });
     }
+    
+    if(!user.username) {
+        return res.status(422).json({
+            errors: {
+                username: 'is required',
+            },
+        });
+    }
 
     var userQuery = User.findOne({'email': user.email}, function(err, data) {
 

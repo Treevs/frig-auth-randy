@@ -41,6 +41,7 @@ export class Navbar extends React.Component {
       user: "",
       showLoginForm: false,
       showRegisterForm: false,
+      newUsername: "",
       email: "",
       password: "",
       modalIsOpen: false
@@ -52,6 +53,7 @@ export class Navbar extends React.Component {
     this.toggleRegisterForm = this.toggleRegisterForm.bind(this);
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
+    this.handleNewUsernameChange = this.handleNewUsernameChange.bind(this);
     this.login = this.login.bind(this);
     this.register = this.register.bind(this);
     this.current = this.current.bind(this);
@@ -103,10 +105,12 @@ export class Navbar extends React.Component {
     //Post register route
     var email = this.state.email;
     var password = this.state.password;
+    var username = this.state.newUsername;
     var register = axios.post('api/users/register', { 
       user: {
         email: email,
         password: password,
+        username: username,
         modalIsOpen: false
       }
     })
@@ -171,6 +175,9 @@ export class Navbar extends React.Component {
   handlePasswordChange(event) {
     this.setState({password: event.target.value});
   }
+  handleNewUsernameChange(event) {
+    this.setState({newUsername: event.target.value});
+  }
 
   openModal() {
     this.setState({modalIsOpen: true});
@@ -205,15 +212,16 @@ export class Navbar extends React.Component {
           <div>
             <div className={this.state.showLoginForm ? '' : 'hidden'}>
               <h2 className="login-modal">Login</h2>
-              Email: <input type="email" value={this.state.email} onChange={this.handleEmailChange}/>
-              Password: <input type="password" value={this.state.password} onChange={this.handlePasswordChange}/>
+              <div className="login-row">Email: <input type="email" value={this.state.email} onChange={this.handleEmailChange}/></div>
+              <div className="login-row">Password: <input type="password" value={this.state.password} onChange={this.handlePasswordChange}/></div>
               <button onClick={this.login}>Log In</button>
               <button onClick={this.closeModal}>Close</button>
             </div>
             <div className={this.state.showRegisterForm ? '' : 'hidden'}>
               <h2 className="register-modal">Register</h2>
-              Email: <input type="email" value={this.state.email} onChange={this.handleEmailChange}/>
-              Password: <input type="password" value={this.state.password} onChange={this.handlePasswordChange}/>
+              <div className="login-row">Username: <input type="text" value={this.state.newUsername} onChange={this.handleNewUsernameChange}/></div>
+              <div className="login-row">Email: <input type="email" value={this.state.email} onChange={this.handleEmailChange}/></div>
+              <div className="login-row">Password: <input type="password" value={this.state.password} onChange={this.handlePasswordChange}/></div>
               <button onClick={this.register}>Sign Up</button>
               <button onClick={this.closeModal}>Close</button>
             </div>
