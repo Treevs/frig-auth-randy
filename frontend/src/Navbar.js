@@ -55,6 +55,7 @@ export class Navbar extends React.Component {
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleNewUsernameChange = this.handleNewUsernameChange.bind(this);
     this.login = this.login.bind(this);
+    this.forgotPassword = this.forgotPassword.bind(this);
     this.register = this.register.bind(this);
     this.current = this.current.bind(this);
     this.logout = this.logout.bind(this);
@@ -79,6 +80,35 @@ export class Navbar extends React.Component {
       user: {
         email: email,
         password: password,
+      }
+    })
+    .then((response) => {
+      console.log(response.data)
+      // alert(response.data.user.email)
+      store.set('token', response.data.user.token)
+      console.log(response.data)
+      this.setState({
+        user: response.data.user,
+        username: response.data.user.username,
+        token: response.data.user.token,
+        loggedIn: true,
+        showLoginForm: false,
+        modalIsOpen: false
+      })
+    })
+    .catch(function (error) {
+      // handle error
+      console.log("error")
+      console.log(error)
+    });
+  }
+  forgotPassword() {
+    //Post forgotPassword route
+    var email = this.state.email;
+    var password = this.state.password;
+    var forgot = axios.post('api/users/forgot', {
+      user: {
+        email: email,
       }
     })
     .then((response) => {
@@ -216,6 +246,7 @@ export class Navbar extends React.Component {
               <div className="login-row">Password: <input type="password" value={this.state.password} onChange={this.handlePasswordChange}/></div>
               <button onClick={this.login}>Log In</button>
               <button onClick={this.closeModal}>Close</button>
+              <button onClick={this.forgotPassword}>Forgot Password</button>
             </div>
             <div className={this.state.showRegisterForm ? '' : 'hidden'}>
               <h2 className="register-modal">Register</h2>
