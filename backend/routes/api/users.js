@@ -115,16 +115,19 @@ router.post('/forgot', auth.optional, (req, res, next) => {
 
     console.log(user);
 
-    var userQuery = User.findOne({ 'email': user.email }, function (err, data) {
-
+    var userQuery = User.findOne({ 'email': user.email }, function (err, user) {
         if (err) {
             //handle error
-        } if (data != null) {
+        } if (user != null) {
             var secret = 'supersecret';
             var token = jwt.sign({ email: user.email }, secret);
+            //Sign takes too long
             sendEmail(user.email, token);
+            user.resettoken = token;
+            user.save();
             
         } else {
+            //Maybe don't send this
             return res.status(422).json({
                 errors: {
                     user: 'does not exist',
@@ -141,6 +144,8 @@ router.get('/reset', auth.optional, (req, res, next) => {
     var decoded = jwt.verify(token, secret);
     return res.json({decodedEmail: decoded})
 })
+
+
 
 async function sendEmail(email, token) {
     // Generate test SMTP service account from ethereal.email

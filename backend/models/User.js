@@ -9,6 +9,7 @@ const UserSchema = new Schema({
     username: {type: String},
     hash: {type: String},
     salt: {type: String},
+    resettoken: {type: String},
 });
 
 UserSchema.methods.setPassword = function(password) {
