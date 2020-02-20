@@ -24,7 +24,16 @@ export class Navbar extends React.Component {
   
   constructor(props){
     super(props)
-    
+
+    var resetToken;
+    console.log(props);
+    if(props.match != null) {
+      resetToken = props.match.params.token
+      console.log("Token: " + props.match.params.token);
+      this.title = resetToken;
+    } else {
+      this.title = "TITLE"
+    }
     //Check to see if logged in
     // var user = store.get('user');
     var token = "Token " + store.get('token');
@@ -262,7 +271,7 @@ export class Navbar extends React.Component {
         
         <div className="navbar">
           <div className="center logo">
-            TITLE
+            {this.title}
           </div>
           <div className="welcome-message">
             <div>

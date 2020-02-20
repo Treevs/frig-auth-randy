@@ -137,10 +137,10 @@ router.post('/forgot', auth.optional, (req, res, next) => {
     })
     return res.json({ message: "email sent" });
 })
-router.get('/reset', auth.optional, (req, res, next) => {
+router.get('/reset/:token', auth.optional, (req, res, next) => {
 
     var secret = 'supersecret';
-    var token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InR2ci5qb21hckBnbWFpbC5jb20iLCJpYXQiOjE1ODE2NTUwMDV9.WoBxtQ627cZ_A-il1bfjYZeOSfVwbL87Z5SehpzqEzI'
+    var token = req.params.token; //eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InR2ci5qb21hckBnbWFpbC5jb20iLCJpYXQiOjE1ODE2NTUwMDV9.WoBxtQ627cZ_A-il1bfjYZeOSfVwbL87Z5SehpzqEzI
     var decoded = jwt.verify(token, secret);
     return res.json({decodedEmail: decoded})
 })
@@ -162,15 +162,15 @@ async function sendEmail(email, token) {
             pass: testAccount.pass // generated ethereal password
         }
     });
-
+    console.log("<a href='http://localhost:5000/reset/"+token+"'>Click here to reset your password</a>");
     // send mail with defined transport object
     let info = await transporter.sendMail({
         from: '"Fred Foo 👻" <foo@example.com>', // sender address
         to: email, // list of receivers
         // to: "bar@example.com, baz@example.com", // list of receivers
         subject: "Hello ✔", // Subject line
-        text: "Hello world?", // plain text body
-        html: "<b>Hello world?</b><br/>"+token // html body
+        text: "Click here to reset your password?", // plain text body
+        html: "<a href='http://localhost:5000/reset/"+token+"'>Click here to reset your password</a>" // html body
     });
 
     console.log("Message sent: %s", info.messageId);

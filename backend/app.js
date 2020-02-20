@@ -28,6 +28,7 @@ var User = require(__dirname+'/models/User');
 require(__dirname+'/config/passport')
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var resetRouter = require('./routes/reset');
 app.use(require('./routes'));
 
 
@@ -49,6 +50,7 @@ app.use(allowCrossDomain);
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/reset', resetRouter);
 
 
 // catch 404 and forward to error handler
