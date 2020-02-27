@@ -13,8 +13,7 @@ var dbport = process.env.DB_PORT || '27017';
 var dbcollection = process.env.DB_COLLECTION || 'foo';
 var connectionString = "mongodb://"+dbhost+":"+dbport+"/"+dbcollection;
 
-console.log(connectionString);
-mongoose.connect(connectionString, { useNewUrlParser: true });
+mongoose.connect(connectionString, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.promise = global.Promise;
 
 

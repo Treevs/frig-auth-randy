@@ -120,7 +120,7 @@ router.post('/forgot', auth.optional, (req, res, next) => {
             //handle error
         } if (user != null) {
             var secret = 'supersecret';
-            var token = jwt.sign({ email: user.email }, secret);
+            var token = jwt.sign({ email: user.email }, secret, {expiresIn: "2h"});
             //Sign takes too long
             sendEmail(user.email, token);
             user.resettoken = token;
@@ -137,6 +137,25 @@ router.post('/forgot', auth.optional, (req, res, next) => {
     })
     return res.json({ message: "email sent" });
 })
+router.post('/reset/', auth.optional, (req, res, next) => {
+    const { body: { token, newPassword } } = req;
+    var secret = 'supersecret';
+    var decoded = jwt.verify(token, secret);
+    var userQuery = User.findOne({ 'email': decoded.email })
+        .then((user) => {
+            if (!user) {
+                return res.sendStatus(400);
+            }
+            user.setPassword(newPassword);
+            return res.json({ user: user.toAuthJSON() });
+        }).catch( (err) => {
+            return res.sendStatus(400);
+        })
+    
+
+    // return res.json({decoded})
+})
+
 router.get('/reset/:token', auth.optional, (req, res, next) => {
 
     var secret = 'supersecret';
@@ -162,7 +181,7 @@ async function sendEmail(email, token) {
             pass: testAccount.pass // generated ethereal password
         }
     });
-    console.log("<a href='http://localhost:5000/reset/"+token+"'>Click here to reset your password</a>");
+    console.log("<a href='http://localhost:3000/reset/"+token+"'>Click here to reset your password</a>");
     // send mail with defined transport object
     let info = await transporter.sendMail({
         from: '"Fred Foo 👻" <foo@example.com>', // sender address
@@ -170,7 +189,7 @@ async function sendEmail(email, token) {
         // to: "bar@example.com, baz@example.com", // list of receivers
         subject: "Hello ✔", // Subject line
         text: "Click here to reset your password?", // plain text body
-        html: "<a href='http://localhost:5000/reset/"+token+"'>Click here to reset your password</a>" // html body
+        html: "<a href='http://localhost:3000/reset/"+token+"'>Click here to reset your password</a>" // html body
     });
 
     console.log("Message sent: %s", info.messageId);
