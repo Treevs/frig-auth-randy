@@ -50,6 +50,10 @@ export class Navbar extends React.Component {
       user: "",
       showLoginForm: false,
       showRegisterForm: false,
+      showResetPasswordForm: false,
+      showChangePasswordForm: false,
+      showResetPasswordForm: false,
+      showChangePasswordForm: false,
       newUsername: "",
       email: "",
       password: "",
@@ -60,6 +64,8 @@ export class Navbar extends React.Component {
 
     this.toggleLoginForm = this.toggleLoginForm.bind(this);
     this.toggleRegisterForm = this.toggleRegisterForm.bind(this);
+    this.toggleResetForm = this.toggleResetForm.bind(this);
+    this.toggleChangeForm = this.toggleChangeForm.bind(this);
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleNewUsernameChange = this.handleNewUsernameChange.bind(this);
@@ -198,14 +204,36 @@ export class Navbar extends React.Component {
     this.setState(state => ({
       modalIsOpen: !state.showLoginForm,
       showLoginForm: !state.showLoginForm,
-      showRegisterForm: false
+      showRegisterForm: false,
+      showResetForm: false,
+      showChangeForm: false,
     }));
   }
   toggleRegisterForm() {
     this.setState(state => ({
       modalIsOpen: !state.showRegisterForm,
       showRegisterForm: !state.showRegisterForm,
-      showLoginForm: false
+      showLoginForm: false,
+      showResetForm: false,
+      showChangeForm: false,
+    }));
+  }
+  toggleResetForm() {
+    this.setState(state => ({
+      modalIsOpen: !state.showResetForm,
+      showResetForm: !state.showResetForm,
+      showLoginForm: false,
+      showRegisterForm: false,
+      showChangeForm: false,
+    }));
+  }
+  toggleChangeForm() {
+    this.setState(state => ({
+      modalIsOpen: !state.showChangeForm,
+      showChangeForm: !state.showChangeForm,
+      showLoginForm: false,
+      showRegisterForm: false,
+      showResetForm: false,
     }));
   }
   handleEmailChange(event) {
@@ -231,7 +259,9 @@ export class Navbar extends React.Component {
     this.setState({
       modalIsOpen: false,
       showLoginForm: false,
-      showRegisterForm: false
+      showRegisterForm: false,
+      showResetForm: false,
+      showChangeForm: false,
 
     });
   }
@@ -263,6 +293,22 @@ export class Navbar extends React.Component {
               <div className="login-row">Email: <input type="email" value={this.state.email} onChange={this.handleEmailChange}/></div>
               <div className="login-row">Password: <input type="password" value={this.state.password} onChange={this.handlePasswordChange}/></div>
               <button onClick={this.register}>Sign Up</button>
+              <button onClick={this.closeModal}>Close</button>
+            </div>
+            <div className={this.state.showResetForm ? '' : 'hidden'}>
+              <h2 className="reset-modal">Reset</h2>
+              <div className="login-row">Username: <input type="text" value={this.state.newUsername} onChange={this.handleNewUsernameChange}/></div>
+              <div className="login-row">Email: <input type="email" value={this.state.email} onChange={this.handleEmailChange}/></div>
+              <div className="login-row">Password: <input type="password" value={this.state.password} onChange={this.handlePasswordChange}/></div>
+              <button onClick={this.reset}>Sign Up</button>
+              <button onClick={this.closeModal}>Close</button>
+            </div>
+            <div className={this.state.showChangeForm ? '' : 'hidden'}>
+              <h2 className="change-modal">Change</h2>
+              <div className="login-row">Username: <input type="text" value={this.state.newUsername} onChange={this.handleNewUsernameChange}/></div>
+              <div className="login-row">Email: <input type="email" value={this.state.email} onChange={this.handleEmailChange}/></div>
+              <div className="login-row">Password: <input type="password" value={this.state.password} onChange={this.handlePasswordChange}/></div>
+              <button onClick={this.change}>Sign Up</button>
               <button onClick={this.closeModal}>Close</button>
             </div>
           </div> 
