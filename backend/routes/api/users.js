@@ -76,8 +76,8 @@ router.post('/login', auth.optional, (req, res, next) => {
             },
         });
     }
-
     return passport.authenticate('local', { session: false }, (err, passportUser, info) => {
+
         if (err) {
             return next(err);
         }
@@ -90,7 +90,11 @@ router.post('/login', auth.optional, (req, res, next) => {
             return res.json({ user: user.toAuthJSON() });
         }
 
-        return res.status(400).info;
+        return res.status(400).json({
+            errors: {
+                usernameOrPassword: 'is incorrect',
+            },
+        });
     })(req, res, next);
 });
 

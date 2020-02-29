@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import HomeScreen from './HomeScreen';
 import Navbar from './Navbar';
+import ResetPassword from './ResetPassword';
 import {
   BrowserRouter as Router,
   Switch,
@@ -16,9 +17,8 @@ function App() {
     <Router>
       <div className="App">
         <Switch>
-          <Route path="/reset/:token" component={Navbar}>
-            {/* <Navbar resetToken={token}></Navbar> */}
-            {/* <HomeScreen></HomeScreen> */}
+          <Route path="/reset/:token" component={ResetPassword}>
+
           </Route>
           <Route path='/'>
             <Navbar></Navbar>

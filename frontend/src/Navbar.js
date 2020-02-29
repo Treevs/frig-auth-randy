@@ -27,13 +27,7 @@ export class Navbar extends React.Component {
 
     var resetToken;
     console.log(props);
-    if(props.match != null) {
-      resetToken = props.match.params.token
-      console.log("Token: " + props.match.params.token);
-      this.title = resetToken;
-    } else {
-      this.title = "TITLE"
-    }
+    this.title = "TITLE"
     //Check to see if logged in
     // var user = store.get('user');
     var token = "Token " + store.get('token');
@@ -59,6 +53,8 @@ export class Navbar extends React.Component {
       password: "",
       modalIsOpen: false
     }
+
+    
 
 
 
@@ -117,6 +113,7 @@ export class Navbar extends React.Component {
       console.log(error)
     });
   }
+  
   forgotPassword() {
     //Post forgotPassword route
     var email = this.state.email;
@@ -205,7 +202,7 @@ export class Navbar extends React.Component {
       modalIsOpen: !state.showLoginForm,
       showLoginForm: !state.showLoginForm,
       showRegisterForm: false,
-      showResetForm: false,
+      showResetPasswordForm: false,
       showChangeForm: false,
     }));
   }
@@ -214,14 +211,14 @@ export class Navbar extends React.Component {
       modalIsOpen: !state.showRegisterForm,
       showRegisterForm: !state.showRegisterForm,
       showLoginForm: false,
-      showResetForm: false,
+      showResetPasswordForm: false,
       showChangeForm: false,
     }));
   }
   toggleResetForm() {
     this.setState(state => ({
-      modalIsOpen: !state.showResetForm,
-      showResetForm: !state.showResetForm,
+      modalIsOpen: !state.showResetPasswordForm,
+      showResetPasswordForm: !state.showResetPasswordForm,
       showLoginForm: false,
       showRegisterForm: false,
       showChangeForm: false,
@@ -233,7 +230,7 @@ export class Navbar extends React.Component {
       showChangeForm: !state.showChangeForm,
       showLoginForm: false,
       showRegisterForm: false,
-      showResetForm: false,
+      showResetPasswordForm: false,
     }));
   }
   handleEmailChange(event) {
@@ -260,7 +257,7 @@ export class Navbar extends React.Component {
       modalIsOpen: false,
       showLoginForm: false,
       showRegisterForm: false,
-      showResetForm: false,
+      showResetPasswordForm: false,
       showChangeForm: false,
 
     });
@@ -295,14 +292,7 @@ export class Navbar extends React.Component {
               <button onClick={this.register}>Sign Up</button>
               <button onClick={this.closeModal}>Close</button>
             </div>
-            <div className={this.state.showResetForm ? '' : 'hidden'}>
-              <h2 className="reset-modal">Reset</h2>
-              <div className="login-row">Username: <input type="text" value={this.state.newUsername} onChange={this.handleNewUsernameChange}/></div>
-              <div className="login-row">Email: <input type="email" value={this.state.email} onChange={this.handleEmailChange}/></div>
-              <div className="login-row">Password: <input type="password" value={this.state.password} onChange={this.handlePasswordChange}/></div>
-              <button onClick={this.reset}>Sign Up</button>
-              <button onClick={this.closeModal}>Close</button>
-            </div>
+            
             <div className={this.state.showChangeForm ? '' : 'hidden'}>
               <h2 className="change-modal">Change</h2>
               <div className="login-row">Username: <input type="text" value={this.state.newUsername} onChange={this.handleNewUsernameChange}/></div>
