@@ -7,7 +7,8 @@ class ResetPassword extends React.Component {
   constructor(props){
     super(props)
     this.state = {
-      token: ""
+      token: "",
+      password: ""
     }
     
     this.reset = this.reset.bind(this);

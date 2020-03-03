@@ -33,7 +33,7 @@ export class Navbar extends React.Component {
     var token = "Token " + store.get('token');
     if(token && token != "Token undefined") {
       var currentUser = this.current(token);
-      console.log(token);
+      this.token = token;
       var loggedIn = true;
     } else {
       var loggedIn = false;
@@ -51,6 +51,7 @@ export class Navbar extends React.Component {
       newUsername: "",
       email: "",
       password: "",
+      newPassword: "",
       modalIsOpen: false
     }
 
@@ -64,12 +65,14 @@ export class Navbar extends React.Component {
     this.toggleChangeForm = this.toggleChangeForm.bind(this);
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
+    this.handleNewPasswordChange = this.handleNewPasswordChange.bind(this);
     this.handleNewUsernameChange = this.handleNewUsernameChange.bind(this);
     this.login = this.login.bind(this);
     this.forgotPassword = this.forgotPassword.bind(this);
     this.register = this.register.bind(this);
     this.current = this.current.bind(this);
     this.logout = this.logout.bind(this);
+    this.change = this.change.bind(this);
     this.openModal = this.openModal.bind(this);
     this.afterOpenModal = this.afterOpenModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
@@ -116,6 +119,7 @@ export class Navbar extends React.Component {
   
   forgotPassword() {
     //Post forgotPassword route
+    console.log("WOW");
     var email = this.state.email;
     var password = this.state.password;
     var forgot = axios.post('api/users/forgot', {
@@ -197,6 +201,26 @@ export class Navbar extends React.Component {
       loggedIn: false
     });
   }
+
+  change() {
+    //Post change route
+    var change = axios.post('/api/users/change', 
+    {
+      "token": this.token,
+      "password": this.state.password,
+      "newPassword": this.state.newPassword},
+    {
+      headers: {Authorization: this.token},
+        
+    })
+    .then((response) => {
+      console.log(response.data);
+      //Navigate home
+    })
+    .catch(function (error) {
+      // handle error
+    });
+  }
   toggleLoginForm() {
     this.setState(state => ({
       modalIsOpen: !state.showLoginForm,
@@ -238,6 +262,9 @@ export class Navbar extends React.Component {
   }
   handlePasswordChange(event) {
     this.setState({password: event.target.value});
+  }
+  handleNewPasswordChange(event) {
+    this.setState({newPassword: event.target.value});
   }
   handleNewUsernameChange(event) {
     this.setState({newUsername: event.target.value});
@@ -295,10 +322,9 @@ export class Navbar extends React.Component {
             
             <div className={this.state.showChangeForm ? '' : 'hidden'}>
               <h2 className="change-modal">Change</h2>
-              <div className="login-row">Username: <input type="text" value={this.state.newUsername} onChange={this.handleNewUsernameChange}/></div>
-              <div className="login-row">Email: <input type="email" value={this.state.email} onChange={this.handleEmailChange}/></div>
-              <div className="login-row">Password: <input type="password" value={this.state.password} onChange={this.handlePasswordChange}/></div>
-              <button onClick={this.change}>Sign Up</button>
+              <div className="login-row">Current password: <input type="password" value={this.state.password} onChange={this.handlePasswordChange}/></div>
+              <div className="login-row">New password: <input type="password" value={this.state.newPassword} onChange={this.handleNewPasswordChange}/></div>
+              <button onClick={this.change}>Submit</button>
               <button onClick={this.closeModal}>Close</button>
             </div>
           </div> 
@@ -322,6 +348,7 @@ export class Navbar extends React.Component {
                     "Welcome, " + this.state.username
                   }
                   
+                  <button className="nav-button" onClick={this.toggleChangeForm}>Change Password</button>
                   <button className="nav-button" onClick={this.logout}>Logout</button>
                 </div>
               </div>

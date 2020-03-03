@@ -119,28 +119,30 @@ router.post('/forgot', auth.optional, (req, res, next) => {
 
     console.log(user);
 
-    var userQuery = User.findOne({ 'email': user.email }, function (err, user) {
+    var userQuery = User.findOne({ 'email': user.email }, function (err, userResult) {
         if (err) {
             //handle error
-        } if (user != null) {
+        } if (userResult != null) {
             var secret = 'supersecret';
-            var token = jwt.sign({ email: user.email }, secret, {expiresIn: "2h"});
+            var token = jwt.sign({ email: userResult.email }, secret, {expiresIn: "2h"});
             //Sign takes too long
-            sendEmail(user.email, token);
-            user.resettoken = token;
-            user.save();
+            sendEmail(userResult.email, token);
+            userResult.resettoken = token;
+            userResult.save();
             
         } else {
             //Maybe don't send this
+            console.log(userResult)
             return res.status(422).json({
                 errors: {
                     user: 'does not exist',
                 },
             });
         }
+        return res.json({ message: "email sent" });
     })
-    return res.json({ message: "email sent" });
 })
+
 router.post('/reset/', auth.optional, (req, res, next) => {
     const { body: { token, newPassword } } = req;
     var secret = 'supersecret';
@@ -151,13 +153,28 @@ router.post('/reset/', auth.optional, (req, res, next) => {
                 return res.sendStatus(400);
             }
             user.setPassword(newPassword);
+            user.save();
             return res.json({ user: user.toAuthJSON() });
         }).catch( (err) => {
             return res.sendStatus(400);
         })
-    
+})
 
-    // return res.json({decoded})
+router.post('/change/', auth.required, (req, res, next) => {
+    const { payload: { id } } = req;
+    const { body: { newPassword } } = req;
+    var userQuery = User.findById(id)
+        .then((user) => {
+            if (!user) {
+                return res.sendStatus(400);
+            }
+            console.log(newPassword)
+            user.setPassword(newPassword);
+            user.save();
+            return res.json({ user: user.toAuthJSON() });
+        }).catch( (err) => {
+            return res.sendStatus(400);
+        })
 })
 
 router.get('/reset/:token', auth.optional, (req, res, next) => {
