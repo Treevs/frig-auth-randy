@@ -207,7 +207,7 @@ export class Navbar extends React.Component {
     var change = axios.post('/api/users/change', 
     {
       "token": this.token,
-      "password": this.state.password,
+      "oldPassword": this.state.password,
       "newPassword": this.state.newPassword},
     {
       headers: {Authorization: this.token},

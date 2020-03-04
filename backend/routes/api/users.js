@@ -162,16 +162,20 @@ router.post('/reset/', auth.optional, (req, res, next) => {
 
 router.post('/change/', auth.required, (req, res, next) => {
     const { payload: { id } } = req;
-    const { body: { newPassword } } = req;
+    const { body: { oldPassword, newPassword } } = req;
     var userQuery = User.findById(id)
         .then((user) => {
             if (!user) {
                 return res.sendStatus(400);
             }
             console.log(newPassword)
-            user.setPassword(newPassword);
-            user.save();
-            return res.json({ user: user.toAuthJSON() });
+            if(!user.validatePassword(oldPassword)) {
+                return res.sendStatus(400);
+            } else {
+                user.setPassword(newPassword);
+                user.save();
+                return res.json({ user: user.toAuthJSON() });
+            }
         }).catch( (err) => {
             return res.sendStatus(400);
         })
