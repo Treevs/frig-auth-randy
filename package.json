@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/Treevs/frig-auth-randy#readme",
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "react-modal": "^3.11.1",
     "store": "^2.0.12"
   }
